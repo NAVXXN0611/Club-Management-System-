@@ -7,6 +7,8 @@ import Register from './pages/auth/Register';
 import StudentDashboard from './pages/student/Dashboard';
 import CoordinatorDashboard from './pages/coordinator/Dashboard';
 import AdminDashboard from './pages/admin/Dashboard';
+import Clubs from './pages/Clubs';
+import ClubDetails from './pages/ClubDetails';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/clubs" element={<Clubs />} />
+          <Route path="/clubs/:slug" element={<ClubDetails />} />
           
           {/* Default Route */}
           <Route path="/" element={<Navigate to="/login" replace />} />
