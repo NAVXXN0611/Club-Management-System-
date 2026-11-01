@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase';
-import { Club, ClubCategory } from '../types';
+import type { Club, ClubCategory } from '../types';
 
 export const getClubs = async (): Promise<Club[]> => {
   const { data, error } = await supabase.from('clubs').select('*');

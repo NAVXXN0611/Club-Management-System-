@@ -5,6 +5,11 @@ export interface Profile {
   full_name: string;
   email: string;
   role: Role;
+  student_id?: string;
+  department?: string;
+  year?: string;
+  phone?: string;
+  avatar_url?: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -36,6 +41,14 @@ export interface ClubMembership {
   status: 'pending' | 'approved' | 'rejected';
   applied_at: string;
   approved_at?: string;
+  clubs?: {
+    name: string;
+    slug: string;
+    description?: string;
+    faculty_coordinator?: string;
+    contact_email?: string;
+  };
+  profiles?: Profile;
 }
 
 export interface Event {
@@ -49,6 +62,8 @@ export interface Event {
   venue: string;
   capacity: number;
   registration_open: boolean;
+  day_of_week?: string;
+  activity_type?: 'weekly_session' | 'workshop' | 'hackathon' | 'competition' | 'guest_lecture';
   created_at: string;
 }
 
@@ -57,14 +72,8 @@ export interface EventRegistration {
   event_id: string;
   student_id: string;
   registered_at: string;
-}
-
-export interface Attendance {
-  id: string;
-  event_id: string;
-  student_id: string;
-  status: 'present' | 'absent' | 'late';
-  marked_at: string;
+  events?: Event & { clubs?: { name: string; slug?: string } };
+  profiles?: Profile;
 }
 
 export interface Announcement {
@@ -73,4 +82,28 @@ export interface Announcement {
   title: string;
   content: string;
   created_at: string;
+  clubs?: { name: string };
+}
+
+export interface Attendance {
+  id: string;
+  event_id: string;
+  student_id: string;
+  status: 'present' | 'absent' | 'late';
+  marked_at: string;
+  events?: Event;
+  profiles?: Profile;
+}
+
+export interface TimetableSlot {
+  id: string;
+  club_id: string;
+  club_name: string;
+  day: string;
+  time: string;
+  activity: string;
+  venue: string;
+  type: string;
+  faculty_coordinator: string;
+  faculty_email: string;
 }

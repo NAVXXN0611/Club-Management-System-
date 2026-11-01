@@ -1,6 +1,6 @@
-import { Navigate, Outlet, useLocation } from 'react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { Role } from '../../types';
+import type { Role } from '../../types';
 
 interface ProtectedRouteProps {
   allowedRoles?: Role[];
@@ -12,29 +12,34 @@ export function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
+  // Not authenticated
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (allowedRoles && profile) {
+  // If a role is required, we MUST have a verified profile loaded
+  if (allowedRoles) {
+    if (!profile) {
+      return (
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-6 text-center">
+          <div className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="text-sm text-slate-600 dark:text-slate-300">Verifying authorization permissions...</p>
+        </div>
+      );
+    }
+
     if (!allowedRoles.includes(profile.role)) {
-      // Redirect to appropriate dashboard if they try to access unauthorized role route
-      switch (profile.role) {
-        case 'student':
-          return <Navigate to="/student/dashboard" replace />;
-        case 'coordinator':
-          return <Navigate to="/coordinator/dashboard" replace />;
-        case 'admin':
-          return <Navigate to="/admin/dashboard" replace />;
-        default:
-          return <Navigate to="/login" replace />;
+      // Redirect to appropriate dashboard based on actual verified role
+      if (profile.role === 'coordinator' || profile.role === 'admin') {
+        return <Navigate to="/coordinator/dashboard" replace />;
       }
+      return <Navigate to="/student/dashboard" replace />;
     }
   }
 

@@ -22,6 +22,49 @@ CREATE POLICY "Admins can view all profiles" ON public.profiles FOR SELECT USING
   EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
 );
 
+-- Create profile rows from Auth user metadata. This runs with definer rights so
+-- profile creation does not depend on a browser session during email signup.
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  INSERT INTO public.profiles (id, full_name, email, role)
+  VALUES (
+    NEW.id,
+    COALESCE(NEW.raw_user_meta_data ->> 'full_name', ''),
+    NEW.email,
+    COALESCE(NULLIF(NEW.raw_user_meta_data ->> 'role', ''), 'student')
+  )
+  ON CONFLICT (id) DO UPDATE
+  SET
+    full_name = EXCLUDED.full_name,
+    email = EXCLUDED.email,
+    role = EXCLUDED.role,
+    updated_at = timezone('utc'::text, now());
+
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+
+CREATE TRIGGER on_auth_user_created
+AFTER INSERT ON auth.users
+FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+INSERT INTO public.profiles (id, full_name, email, role)
+SELECT
+  users.id,
+  COALESCE(users.raw_user_meta_data ->> 'full_name', ''),
+  users.email,
+  COALESCE(NULLIF(users.raw_user_meta_data ->> 'role', ''), 'student')
+FROM auth.users
+LEFT JOIN public.profiles ON profiles.id = users.id
+WHERE profiles.id IS NULL;
+
 -----------------------------------------
 -- 2. CLUB CATEGORIES
 -----------------------------------------
