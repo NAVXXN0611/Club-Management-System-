@@ -163,6 +163,8 @@ npm run build
 
 ### 7. Vercel Hosting Configuration
 
+- **Live Production URL**: [https://club-management-system-pi.vercel.app](https://club-management-system-pi.vercel.app)
+
 The project is preconfigured for single-page application (SPA) hosting on Vercel via [`vercel.json`](file:///e:/Club%20Management%20System/vercel.json):
 
 ```json
