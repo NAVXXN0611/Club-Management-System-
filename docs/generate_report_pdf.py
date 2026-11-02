@@ -371,7 +371,7 @@ def generate_skill_report_pdf(output_path):
     story.append(Spacer(1, 4))
 
     story.append(Paragraph("<b>4.4 Unit Testing and Results (Pytest Suite)</b>", h2_style))
-    story.append(Paragraph("A rigorous 30-case automated test suite was implemented in Python Pytest covering 6 categories: Positive (7), Negative (5), Boundary (5), Functional (5), Integration (4), and Validation Error Handling (4). <b>Result: 30 Passed out of 30 (100% Success Rate in 8.79s).</b>", body_style))
+    story.append(Paragraph("A comprehensive 40-case classified test suite was implemented covering 3 subdivisions: <b>Black Box Testing (22 cases: Positive, Negative, Boundary, Functional)</b>, <b>White Box Testing (9 cases: Database Integrity, Algorithmic Calculation Logic, Role Matrix)</b>, and <b>Selenium 4 Automated Browser Testing (9 cases: E2E Headless Chrome UI, Theme Switch, Forms, Timetable)</b>. <b>Result: 40 Passed out of 40 (100% Success Rate in 16.31s).</b>", body_style))
 
     story.append(PageBreak())
 
