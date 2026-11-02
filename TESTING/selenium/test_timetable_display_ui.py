@@ -33,3 +33,4 @@ def test_sel_09_dual_portal_access_cards(chrome_driver, frontend_url):
     portals_text = portals_elem.text
     assert "Student Portal" in portals_text
     assert "Faculty Coordinator" in portals_text
+

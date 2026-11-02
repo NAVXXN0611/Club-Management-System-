@@ -65,3 +65,4 @@ def test_wb_role_02_club_taxonomy_structural_integrity(http_session, supabase_ur
     for club in clubs:
         if club.get("category_id"):
             assert club["category_id"] in cats, f"Club {club['name']} links to orphan category ID {club['category_id']}"
+

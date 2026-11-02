@@ -35,3 +35,4 @@ def test_sel_07_register_page_form_elements_and_role_selection(chrome_driver, fr
     )
     form_text = chrome_driver.find_element(By.TAG_NAME, "form").text
     assert "Student" in form_text or "Coordinator" in form_text or "Register" in form_text
+

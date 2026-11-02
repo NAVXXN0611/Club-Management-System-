@@ -78,3 +78,4 @@ def test_bb_bnd_05_malformed_uuid_boundary(http_session, supabase_url, supabase_
     assert resp.status_code == 400
     data = resp.json()
     assert "message" in data or "code" in data
+

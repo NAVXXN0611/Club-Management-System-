@@ -64,3 +64,4 @@ def test_bb_fnc_05_malformed_json_recovery(http_session, supabase_url, supabase_
         timeout=10
     )
     assert resp.status_code in [400, 401, 403, 415]
+

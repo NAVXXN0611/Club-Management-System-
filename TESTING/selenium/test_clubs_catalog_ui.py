@@ -27,3 +27,4 @@ def test_sel_05_category_filter_pills_interactive(chrome_driver, frontend_url):
     chrome_driver.get(f"{frontend_url}/clubs")
     inputs_or_buttons = chrome_driver.find_elements(By.CSS_SELECTOR, "input[type='text'], input[placeholder*='search' i], button")
     assert len(inputs_or_buttons) > 0, "Expected search input or category filter buttons on /clubs"
+

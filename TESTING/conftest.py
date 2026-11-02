@@ -22,7 +22,15 @@ def env_config():
 
 @pytest.fixture(scope="session")
 def frontend_url():
-    return "http://localhost:5173"
+    local_url = "http://localhost:5173"
+    prod_url = "https://club-management-system-pi.vercel.app"
+    try:
+        r = requests.get(local_url, timeout=1.5)
+        if r.status_code == 200:
+            return local_url
+    except Exception:
+        pass
+    return prod_url
 
 @pytest.fixture(scope="session")
 def supabase_url(env_config):
@@ -49,4 +57,3 @@ def http_session():
         "User-Agent": "CCMS-IA3-Pytest-TestSuite/1.0"
     })
     return session
-

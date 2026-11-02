@@ -83,3 +83,4 @@ def test_wb_calc_03_password_length_constraint_eval():
     # Boundary: length >= 6
     assert validate_password_length("123456") is True
     assert validate_password_length("SecurePass123!") is True
+

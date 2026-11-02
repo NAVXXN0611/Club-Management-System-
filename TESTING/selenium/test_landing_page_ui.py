@@ -50,3 +50,4 @@ def test_sel_03_navigation_links_presence(chrome_driver, frontend_url):
     )
     nav_text = nav.text
     assert "Portals" in nav_text or "Activity Timetable" in nav_text or "Clubs" in nav_text
+
