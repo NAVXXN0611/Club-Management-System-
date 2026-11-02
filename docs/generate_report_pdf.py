@@ -4,7 +4,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, KeepTogether, HRFlowable
+    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, KeepTogether, HRFlowable, Image as RLImage
 )
 from reportlab.pdfgen import canvas
 
@@ -494,18 +494,33 @@ def generate_skill_report_pdf(output_path):
         ]
     ]
 
-    cert_table = Table(cert_box_data, colWidths=[500])
-    cert_table.setStyle(TableStyle([
-        ('BOX', (0, 0), (-1, -1), 2, C_PRIMARY),
-        ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#FAF5FF")),
-        ('TOPPADDING', (0, 0), (-1, -1), 16),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 16),
-        ('LEFTPADDING', (0, 0), (-1, -1), 20),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 20),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-    ]))
-
-    story.append(cert_table)
+    cert_img_path = os.path.join(os.path.dirname(__file__), "certificate_extracted.jpg")
+    if os.path.exists(cert_img_path):
+        story.append(Spacer(1, 10))
+        img = RLImage(cert_img_path, width=520, height=367)
+        img_table = Table([[img]], colWidths=[530])
+        img_table.setStyle(TableStyle([
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('BOX', (0, 0), (-1, -1), 1.5, C_PRIMARY),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ('LEFTPADDING', (0, 0), (-1, -1), 4),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+        ]))
+        story.append(img_table)
+    else:
+        cert_table = Table(cert_box_data, colWidths=[500])
+        cert_table.setStyle(TableStyle([
+            ('BOX', (0, 0), (-1, -1), 2, C_PRIMARY),
+            ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#FAF5FF")),
+            ('TOPPADDING', (0, 0), (-1, -1), 16),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 16),
+            ('LEFTPADDING', (0, 0), (-1, -1), 20),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 20),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ]))
+        story.append(cert_table)
     story.append(Spacer(1, 20))
     story.append(Paragraph("<i>(Scanned original digital credential verified under Course Code 25CS312 Software Engineering curriculum)</i>", ParagraphStyle('Note', parent=styles['Normal'], fontName='Helvetica-Oblique', fontSize=8, alignment=1, textColor=C_SECONDARY)))
 
